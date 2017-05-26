@@ -15,6 +15,9 @@
 @property (readonly) CDMachOFile *machOFile;
 @property (nonatomic, readonly) BOOL hasObjectiveCData;
 
+@property (nonatomic, readonly) NSMutableArray<CDOCClass*>* classes;
+@property (nonatomic, readonly) NSMutableArray<CDOCCategory*>* categories;
+
 @property (nonatomic, readonly) CDSection *objcImageInfoSection;
 @property (nonatomic, readonly) NSString *garbageCollectionStatus;
 

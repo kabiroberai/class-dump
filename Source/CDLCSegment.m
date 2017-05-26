@@ -110,6 +110,10 @@ NSString *CDSegmentEncryptionTypeName(CDSegmentEncryptionType type)
     return (self.flags & SG_PROTECTED_VERSION_1) == SG_PROTECTED_VERSION_1;
 }
 
+#ifndef PAGE_SIZE
+#define PAGE_SIZE 16384 // 16k
+#endif
+
 - (CDSegmentEncryptionType)encryptionType;
 {
     //NSLog(@"%s, isProtected? %u, filesize: %lu, fileoff: %lu", __cmd, [self isProtected], [self filesize], [self fileoff]);

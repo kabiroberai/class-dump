@@ -121,7 +121,10 @@ BOOL CDArchUses64BitLibraries(CDArch arch)
 // Returns CDFatFile or CDMachOFile
 + (id)fileWithContentsOfFile:(NSString *)filename searchPathState:(CDSearchPathState *)searchPathState;
 {
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     NSData *data = [NSData dataWithContentsOfMappedFile:filename];
+    #pragma clang diagnostic pop
     CDFatFile *fatFile = [[CDFatFile alloc] initWithData:data filename:filename searchPathState:searchPathState];
     if (fatFile != nil)
         return fatFile;

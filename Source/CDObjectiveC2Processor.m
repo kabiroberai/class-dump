@@ -128,8 +128,8 @@
         for (CDOCMethod *method in [self loadMethodsAtAddress:objc2Protocol.optionalClassMethods extendedMethodTypesCursor:extendedMethodTypesCursor])
             [protocol addOptionalClassMethod:method];
         
-        for (CDOCProperty *property in [self loadPropertiesAtAddress:objc2Protocol.instanceProperties])
-            [protocol addProperty:property];
+//        for (CDOCProperty *property in [self loadPropertiesAtAddress:objc2Protocol.instanceProperties])
+//            [protocol addProperty:property];
     }
     
     return protocol;
@@ -169,8 +169,8 @@
     for (CDOCProtocol *protocol in [self.protocolUniquer uniqueProtocolsAtAddresses:[self protocolAddressListAtAddress:objc2Category.protocols]])
         [category addProtocol:protocol];
     
-    for (CDOCProperty *property in [self loadPropertiesAtAddress:objc2Category.instanceProperties])
-        [category addProperty:property];
+//    for (CDOCProperty *property in [self loadPropertiesAtAddress:objc2Category.instanceProperties])
+//        [category addProperty:property];
     
     {
         uint64_t classNameAddress = address + [self.machOFile ptrSize];
@@ -220,8 +220,7 @@
     objc2Class.vtable     = [cursor readPtr];
 
     uint64_t value        = [cursor readPtr];
-    class.isSwiftClass    = (value & 0x1) != 0;
-    objc2Class.data       = value & ~7;
+    objc2Class.data       = value & ~1;
 
     objc2Class.reserved1  = [cursor readPtr];
     objc2Class.reserved2  = [cursor readPtr];
@@ -258,6 +257,7 @@
     
     CDOCClass *aClass = [[CDOCClass alloc] init];
     [aClass setName:str];
+    aClass.isSwiftClass = (value & 0x1) != 0;
     
     for (CDOCMethod *method in [self loadMethodsAtAddress:objc2ClassData.baseMethods])
         [aClass addInstanceMethod:method];
@@ -302,8 +302,8 @@
     for (CDOCProtocol *protocol in [self.protocolUniquer uniqueProtocolsAtAddresses:[self protocolAddressListAtAddress:objc2ClassData.baseProtocols]])
         [aClass addProtocol:protocol];
     
-    for (CDOCProperty *property in [self loadPropertiesAtAddress:objc2ClassData.baseProperties])
-        [aClass addProperty:property];
+//    for (CDOCProperty *property in [self loadPropertiesAtAddress:objc2ClassData.baseProperties])
+//        [aClass addProperty:property];
     
     return aClass;
 }

@@ -1,0 +1,4 @@
+module MachObjC {
+    umbrella header "MachObjC.h"
+    export *
+}

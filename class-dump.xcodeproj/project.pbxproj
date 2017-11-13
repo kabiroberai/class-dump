@@ -1201,6 +1201,7 @@
 				GCC_PREFIX_HEADER = "MachObjC-Prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
 				VALID_ARCHS = "i386 x86_64 arm64";
 			};
@@ -1215,6 +1216,7 @@
 				GCC_PREFIX_HEADER = "MachObjC-Prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
 				VALID_ARCHS = "i386 x86_64 arm64";
 			};

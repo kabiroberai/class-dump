@@ -91,6 +91,10 @@
     }
 }
 
+- (BOOL)isAnySwiftClass {
+    return self.isLegacySwiftClass || self.isStableSwiftClass;
+}
+
 #pragma mark - CDTopologicalSort protocol
 
 - (NSString *)identifier;

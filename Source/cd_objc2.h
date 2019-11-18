@@ -13,12 +13,23 @@ struct cd_objc2_image_info {
 // 64-bit, also holding 32-bit
 //
 
+// https://opensource.apple.com/source/objc4/objc4-756.2/runtime/objc-runtime-new.h.auto.html
+// class is a Swift class from the pre-stable Swift ABI
+#define FAST_IS_SWIFT_LEGACY    (1UL<<0)
+// class is a Swift class from the stable Swift ABI
+#define FAST_IS_SWIFT_STABLE    (1UL<<1)
+// class or superclass has default retain/release/autorelease/retainCount/
+//   _tryRetain/_isDeallocating/retainWeakReference/allowsWeakReference
+#define FAST_HAS_DEFAULT_RR     (1UL<<2)
+// data pointer
+#define FAST_DATA_MASK          0x00007ffffffffff8UL
+
 struct cd_objc2_class {
     uint64_t isa;
     uint64_t superclass;
     uint64_t cache;
     uint64_t vtable;
-    uint64_t data; // points to class_ro_t
+    uint64_t tagged_data; // points to class_ro_t
     uint64_t reserved1;
     uint64_t reserved2;
     uint64_t reserved3;

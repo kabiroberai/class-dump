@@ -214,22 +214,20 @@
     NSParameterAssert([cursor offset] != 0);
     
     struct cd_objc2_class objc2Class;
-    objc2Class.isa        = [cursor readPtr];
-    objc2Class.superclass = [cursor readPtr];
-    objc2Class.cache      = [cursor readPtr];
-    objc2Class.vtable     = [cursor readPtr];
-
-    uint64_t value        = [cursor readPtr];
-    objc2Class.data       = value & ~1;
-
-    objc2Class.reserved1  = [cursor readPtr];
-    objc2Class.reserved2  = [cursor readPtr];
-    objc2Class.reserved3  = [cursor readPtr];
+    objc2Class.isa         = [cursor readPtr];
+    objc2Class.superclass  = [cursor readPtr];
+    objc2Class.cache       = [cursor readPtr];
+    objc2Class.vtable      = [cursor readPtr];
+    objc2Class.tagged_data = [cursor readPtr];
+    objc2Class.reserved1   = [cursor readPtr];
+    objc2Class.reserved2   = [cursor readPtr];
+    objc2Class.reserved3   = [cursor readPtr];
     //NSLog(@"%016lx %016lx %016lx %016lx", objc2Class.isa, objc2Class.superclass, objc2Class.cache, objc2Class.vtable);
     //NSLog(@"%016lx %016lx %016lx %016lx", objc2Class.data, objc2Class.reserved1, objc2Class.reserved2, objc2Class.reserved3);
-    
-    NSParameterAssert(objc2Class.data != 0);
-    [cursor setAddress:objc2Class.data];
+
+    uint64_t data_ptr = objc2Class.tagged_data & FAST_DATA_MASK;
+    NSParameterAssert(data_ptr != 0);
+    [cursor setAddress:data_ptr];
 
     struct cd_objc2_class_ro_t objc2ClassData;
     objc2ClassData.flags         = [cursor readInt32];
@@ -254,10 +252,13 @@
     //NSLog(@"%016lx %016lx %016lx %016lx", objc2ClassData.ivars, objc2ClassData.weakIvarLayout, objc2ClassData.baseProperties);
     NSString *str = [self.machOFile stringAtAddress:objc2ClassData.name];
     //NSLog(@"name = %@", str);
-    
+
+    if (!str) return nil;
+
     CDOCClass *aClass = [[CDOCClass alloc] init];
     [aClass setName:str];
-    aClass.isSwiftClass = (value & 0x1) != 0;
+    aClass.isLegacySwiftClass = objc2Class.tagged_data & FAST_IS_SWIFT_LEGACY;
+    aClass.isStableSwiftClass = objc2Class.tagged_data & FAST_IS_SWIFT_STABLE;
     
     for (CDOCMethod *method in [self loadMethodsAtAddress:objc2ClassData.baseMethods])
         [aClass addInstanceMethod:method];
@@ -348,19 +349,20 @@
     NSParameterAssert([cursor offset] != 0);
     
     struct cd_objc2_class objc2Class;
-    objc2Class.isa        = [cursor readPtr];
-    objc2Class.superclass = [cursor readPtr];
-    objc2Class.cache      = [cursor readPtr];
-    objc2Class.vtable     = [cursor readPtr];
-    objc2Class.data       = [cursor readPtr];
-    objc2Class.reserved1  = [cursor readPtr];
-    objc2Class.reserved2  = [cursor readPtr];
-    objc2Class.reserved3  = [cursor readPtr];
+    objc2Class.isa         = [cursor readPtr];
+    objc2Class.superclass  = [cursor readPtr];
+    objc2Class.cache       = [cursor readPtr];
+    objc2Class.vtable      = [cursor readPtr];
+    objc2Class.tagged_data = [cursor readPtr];
+    objc2Class.reserved1   = [cursor readPtr];
+    objc2Class.reserved2   = [cursor readPtr];
+    objc2Class.reserved3   = [cursor readPtr];
     //NSLog(@"%016lx %016lx %016lx %016lx", objc2Class.isa, objc2Class.superclass, objc2Class.cache, objc2Class.vtable);
     //NSLog(@"%016lx %016lx %016lx %016lx", objc2Class.data, objc2Class.reserved1, objc2Class.reserved2, objc2Class.reserved3);
-    
-    NSParameterAssert(objc2Class.data != 0);
-    [cursor setAddress:objc2Class.data];
+
+    uint64_t data_ptr = objc2Class.tagged_data & FAST_DATA_MASK;
+    NSParameterAssert(data_ptr != 0);
+    [cursor setAddress:data_ptr];
 
     struct cd_objc2_class_ro_t objc2ClassData;
     objc2ClassData.flags         = [cursor readInt32];

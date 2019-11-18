@@ -312,7 +312,7 @@ NSString *CDSegmentEncryptionTypeName(CDSegmentEncryptionType type)
                 CCCryptorRelease(cryptor2);
             } else {
                 NSLog(@"Unknown encryption type: 0x%08x", magic);
-                exit(99);
+                return nil;
             }
         }
     }

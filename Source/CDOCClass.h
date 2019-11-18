@@ -15,6 +15,8 @@
 @property (copy, readonly) NSString *superClassName;
 @property (strong) NSArray *instanceVariables;
 @property (assign) BOOL isExported;
-@property (assign) BOOL isSwiftClass;
+@property (assign) BOOL isLegacySwiftClass;
+@property (assign) BOOL isStableSwiftClass;
+@property (readonly) BOOL isAnySwiftClass;
 
 @end

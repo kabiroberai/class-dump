@@ -329,7 +329,6 @@ static NSString *CDMachOFileMagicNumberDescription(uint32_t magic)
     CDLCSegment *segment = [self segmentContainingAddress:address];
     if (segment == nil) {
         NSLog(@"Error: Cannot find offset for address 0x%08lx in stringAtAddress:", address);
-        exit(5);
         return nil;
     }
 
@@ -360,12 +359,12 @@ static NSString *CDMachOFileMagicNumberDescription(uint32_t magic)
     CDLCSegment *segment = [self segmentContainingAddress:address];
     if (segment == nil) {
         NSLog(@"Error: Cannot find offset for address 0x%08lx in dataOffsetForAddress:", address);
-        exit(5);
+        return 0;
     }
 
     if ([segment isProtected]) {
         NSLog(@"Error: Segment is protected.");
-        exit(5);
+        return 0;
     }
 
 #if 0
